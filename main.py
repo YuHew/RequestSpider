@@ -6,10 +6,10 @@ from base.storage import *
 
 def static_xpath_file():
     downloader = create_downloader()
-    response = downloader.download('http://www.baidu.com')
+    response = downloader.download('https://www.baidu.com')
 
-    parse = create_parser(rules={'content':'/html/head/meta[5]/@content'})
-    result = parse.parse(response.text)
+    parse_xpath = create_parser(rules={'content':'/html/head/meta[5]/@content'})
+    result = parse_xpath.parse(response.text)
     for field, title in result.items():
         print(field, title)
 
@@ -21,8 +21,8 @@ def static_json_file():
     downloader = create_downloader('api')
     response = downloader.download('https://api.it8.com.cn/juejin/')
 
-    parse = create_parser('jsonpath', rules={'title': '$..title'})
-    result = parse.parse(response.text)
+    parse_json = create_parser('jsonpath', rules={'title': '$..title'})
+    result = parse_json.parse(response.text)
     for field, title in result.items():
         print(field, title)
 

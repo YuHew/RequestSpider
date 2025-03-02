@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from lxml import etree
-from jsonpath_ng import parse
+from jsonpath import jsonpath
+import json
 
 class BaseParser(ABC):
     """解析器基类"""
@@ -40,17 +41,17 @@ class JSONPathParser(BaseParser):
         初始化JSONPath解析器
         :param rules: JSONPath规则字典，格式为 {字段名: jsonpath表达式}
         """
-        self.rules = {k: parse(v) for k, v in rules.items()}
+        self.rules = rules
         
     def parse(self, content):
         """使用JSONPath解析JSON内容"""
         if isinstance(content, str):
-            import json
-            content = json.loads(content)
+            content_json = json.loads(content)
             
         result = {}
-        for field, jsonpath in self.rules.items():
-            matches = [match.value for match in jsonpath.find(content)]
+        for field, jsonpath_rule in self.rules.items():
+            print(field, jsonpath_rule)
+            matches = jsonpath(content_json, jsonpath_rule)
             if matches:
                 result[field] = matches[0] if len(matches) == 1 else matches
                 
