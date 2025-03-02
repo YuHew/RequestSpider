@@ -4,7 +4,7 @@ import selenium
 from selenium.webdriver.chrome import webdriver
 from selenium.webdriver.chrome.options import Options
 # import js2py
-from .config import config
+from base.config import config
 
 class BaseDownloader(ABC):
     """下载器基类"""
@@ -52,7 +52,10 @@ class APIDownloader(BaseDownloader):
             timeout=timeout,
             **{k:v for k,v in kwargs.items() if k not in ['headers', 'proxies', 'timeout']}
         )
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            print(e)
         return response
 
 class DynamicDownloader(BaseDownloader):
