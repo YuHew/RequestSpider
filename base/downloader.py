@@ -19,10 +19,11 @@ class StaticDownloader(BaseDownloader):
         headers = kwargs.get('headers', {})
         if 'User-Agent' not in headers:
             headers['User-Agent'] = config.user_agent
+            print(config.user_agent)
             
         proxies = kwargs.get('proxies', config.get_proxy())
         timeout = kwargs.get('timeout', 30)
-        
+
         response = requests.get(
             url,
             headers=headers,
@@ -30,7 +31,11 @@ class StaticDownloader(BaseDownloader):
             timeout=timeout,
             **{k:v for k,v in kwargs.items() if k not in ['headers', 'proxies', 'timeout']}
         )
-        response.raise_for_status()
+
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            print(e)
         return response
 
 class APIDownloader(BaseDownloader):
