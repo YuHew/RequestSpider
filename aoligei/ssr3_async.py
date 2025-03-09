@@ -159,6 +159,7 @@ async def main():
         with open('films.txt', 'w', encoding='utf-8') as f:
             f.write('\n'.join(str(film) for film in films))
 
+
 if __name__ == '__main__':
     asyncio.run(main())
 
